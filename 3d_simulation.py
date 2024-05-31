@@ -17,15 +17,16 @@ camera_posy = 0
 coluna = pygame.Surface((4, 30))
 coluna.fill( (255, 255, 255) )
 
-arvore = pygame.image.load('./arvore1.png')
+arvore = pygame.image.load('tree.png')
+esqueleto = pygame.image.load('skeleton.png')
 
 def distanciate_image(image, distance):
 	size = image.get_size()
 	return pygame.transform.scale(
 		image,
 		(
-			(screen_size[0]/120)* math.atan(size[0]/distance)*180/math.pi,
-			(screen_size[1]/60)* math.atan(size[1]/distance)*180/math.pi,
+			screen_size[0]* ((math.atan(size[0]/distance)*180/math.pi)/120),
+			screen_size[1]* ((math.atan(size[1]/distance)*180/math.pi)/ 60),
 		)
 	)
 
@@ -45,12 +46,29 @@ def blit_image(image, posx, posy):
 		)
 	)
 
-map = [[1 for i in range(5)] for j in range(5)]
+tree_map = [[0 for i in range(10)] for j in range(10)]
+for i in range(10)[::2]:
+	for j in range(10)[::2]:
+		tree_map[i][j] = 1
+
+skt_map  = [[0 for i in range(10)] for j in range(10)]
+skt_map[7][3] = 1
+
+maps = {
+	arvore: tree_map,
+	esqueleto: skt_map,
+}
+
+def render_multimap(dicio, tam):
+	for y in range(tam[1])[::-1]:
+		for x in range(tam[0]):
+			for img, map in dicio.items():
+				if map[y][x]: blit_image(img, (x-tam[0]/2)*25 -camera_posx, (y)*25 -camera_posy)
 
 def blit_map(map, img):
 	for y in range(len(map))[::-1]:
 		for x in range(len(map[y])):
-			if map[y][x]: blit_image(arvore, (x-2)*50 -camera_posx, (y)*50 -camera_posy)
+			if map[y][x]: blit_image(img, (x-2)*25 -camera_posx, (y)*25 -camera_posy)
 
 clock = pygame.time.Clock()
 while True:
@@ -66,9 +84,7 @@ while True:
 	if pressed_keys[K_UP]:    camera_posy += 1
 	if pressed_keys[K_DOWN]:  camera_posy -= 1
 
-	for y in range(len(map))[::-1]:
-		for x in range(len(map[y])):
-			if map[y][x]: blit_image(arvore, (x-2)*50 -camera_posx, (y)*50 -camera_posy)
+	render_multimap(maps, (10, 10))
 
 	pygame.display.flip()
 	screen.fill( (0, 0, 0) )
