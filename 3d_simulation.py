@@ -13,6 +13,10 @@ screen = pygame.display.set_mode(screen_size)
 
 camera_posx = 0
 camera_posy = 0
+pre_angle    = 0
+camera_angle = 0
+
+tile_space = (25, 25)
 
 coluna = pygame.Surface((4, 30))
 coluna.fill( (255, 255, 255) )
@@ -63,7 +67,7 @@ def render_multimap(dicio, tam):
 	for y in range(tam[1])[::-1]:
 		for x in range(tam[0]):
 			for img, map in dicio.items():
-				if map[y][x]: blit_image(img, (x-tam[0]/2)*25 -camera_posx, (y)*25 -camera_posy)
+				if map[y][x]: blit_image(img, (x-tam[0]/2)*tile_space[0] -camera_posx, y*tile_space[1] -camera_posy)
 
 def blit_map(map, img):
 	for y in range(len(map))[::-1]:
