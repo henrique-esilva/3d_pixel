@@ -92,7 +92,7 @@ maps = {
 }
 
 def get_real_coordinates( x, y ):
-	return ( (x-2)*tile_space[0], y*tile_space[1] )
+	return ( x*tile_space[0], y*tile_space[1] )
 
 def get_distance_to_camera( coord ):
 	# give real coordinates! without camera_pos discount
