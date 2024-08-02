@@ -55,14 +55,13 @@ def blit_image(image, posx, posy):
 		)
 	)'''
 
-def blit_image( image, posx, posy ):
-
-	distance = ( posx**2 + posy**2 ) ** (1/2)
-	observated_angle = math.atan2(posy, posx)
-	total_angle = camera_angle + observated_angle
+def blit_image( image, posx, posy, distance ):
 
 	if distance == 0:
 		return 0
+
+	observated_angle = math.atan2(posy, posx)
+	total_angle = camera_angle + observated_angle
 
 	posx = distance * math.cos(total_angle)
 	posy = distance * math.sin(total_angle)
@@ -115,8 +114,8 @@ def render_multimap_according_distance(maps):
 	keys, dicio = create_dict_distance_to_coordinate(tuple(maps.values())[0])
 	for i in keys:
 		for img, map in maps.items():
-			if map[ dicio[i][1] ][ dicio[i][0] ]:
-				blit_image(img, (dicio[i][0])*tile_space[0] -camera_posx, (dicio[i][1])*tile_space[1] -camera_posy)
+			if map[ dicio[i][1] ][ dicio[i][0] ] and (i[0]!=0):
+				blit_image(img, (dicio[i][0])*tile_space[0] -camera_posx, (dicio[i][1])*tile_space[1] -camera_posy, i[0])
 
 def render_multimap(dicio, tam):
 	for y in range(tam[1])[::-1]:
